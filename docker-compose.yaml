@@ -1,0 +1,53 @@
+services:
+  mean-app:
+    build:
+      context: .
+      dockerfile: Dockerfile  
+    container_name: mean-app
+    hostname: mean-app
+    environment:
+      - MONGO_URI=mongodb://mean:mean@mean-mongo/meandb
+    ports:
+      - "80:80"   # Nginx serving Angular frontend
+    networks:
+      - mean-network
+    depends_on:
+      - mean-mongo
+
+  mean-mongo:
+    image: mongo:latest
+    container_name: mean-mongo
+    hostname: mean-mongo
+    # ports:
+    #   - "27017:27017"
+    networks:
+      - mean-network
+    volumes:
+      - ./mongo_data:/data/db
+      # the scripts in this dir creates the user and associated credentials
+      - ./init-scripts:/docker-entrypoint-initdb.d
+      # if the init script does not work, issue this command after container is up
+      # % docker exec -it mean-mongo mongosh -u root -p pass --authenticationDatabase admin /docker-entrypoint-initdb.d/mongo-init.js
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+
+  mean-mongo-express:
+    image: mongo-express:latest
+    container_name: mean-mongo-express
+    ports:
+      - "4202:8081"
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=pass
+      - ME_CONFIG_MONGODB_SERVER=mean-mongo
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=pass
+    networks:
+      - mean-network
+    depends_on:
+      - mean-mongo
+
+networks:
+  mean-network:
+    driver: bridge

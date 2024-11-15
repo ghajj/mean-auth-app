@@ -1,0 +1,33 @@
+// Import Bootstrap
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+// body {
+//   background-color: #494343; // Example: a light gray
+// }
+
+body {
+  background: linear-gradient(135deg, #474545, #363535);
+}
+
+// body {
+//   background: url('../public/images/booksDark.jpg') fixed;
+//   background-size: cover;
+//   opacity: 0.9; // Adjust opacity for subtlety
+// }
+
+// Custom global styles for the app
+  .navbar-nav .nav-link {
+    text-decoration: none; // Removes underline from links
+    color: #ADD8E6; // Set the link color to light blue
+  }
+  
+.navbar-nav .nav-link:hover {
+    text-decoration: underline; // Optional: Add underline on hover
+    color: #87CEEB; // Change to a slightly darker blue on hover
+
+  }
+
+a.navbar-brand {
+    color: #87CEEB !important; // !important is needed to override the focus
+    text-decoration: none !important;
+}
